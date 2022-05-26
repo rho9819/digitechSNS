@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자유 업로드</title>
+
+  <!-- <script defer src="//firebase/6.6.2/firebase-app.js"></script>
+  <script defer src="//firebase/6.6.2/firebase-auth.js"></script>
+  <script defer src="//firebase/6.6.2/firebase-database.js"></script>
+  <script defer src="//firebase/6.6.2/firebase-messaging.js"></script>
+  <script defer src="//firebase/6.6.2/firebase-storage.js"></script>
+  <script defer src="//firebase/init.js"></script> -->
+
+  
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+  <style media="screen">
+  </style>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap');
+    *{
+    margin: 0;
+    bottom: 0;
+    
+}
+
+    #logout{
+      cursor: pointer;
+      float: right;
+      color: gray;
+    }
+ 
+
+    #main{
+      display: flex;
+      float: right;
+      margin-top: -24px;
+      margin-left: 10px;
+      color: gray;
+    }
+ 
+.d{
+  width: 280px;
+  height: 400px;
+  background-color: rgb(79, 153, 175);
+  border-radius: 20px;
+  font-family: 'Gowun Dodum', sans-serif;
+  font-size: 30px;
+  margin: 0 auto;
+  text-align: center;
+}
+#aa{
+  display: flex;
+  
+}
+a{
+  color: black;
+  text-decoration: none;
+  
+}
+.title{
+  display: inline-block;
+  font-size:40px;
+  margin-left: 10px;
+  margin-top: 0px;
+  margin-bottom: 10px;
+    
+}
+
+body{
+  background:rgb(206, 220, 224);
+}
+
+#filesubmit{
+    float: right;
+    margin-right: 50px;
+}
+
+
+.btns{
+    text-align: center;
+    font-family: 'Gowun Dodum', sans-serif;
+    border: none;
+    border-radius: 5px;
+    
+}
+#btn1:hover{
+    color: white;
+    background-color: rgb(57, 77, 83);
+    transition: .3s;
+}
+#btn2:hover{
+    color: white;
+    background-color: rgb(57, 77, 83);
+    transition: .3s;
+}
+
+#btn3:hover{
+    color: white;
+    background-color: rgb(57, 77, 83);
+    transition: .3s;
+}
+
+  </style>
+
+</head>
+
+<body>
+
+
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    <a href="./index.html"><b><p  class="title " style="  font-family: 'Gowun Dodum', sans-serif;">디지텍 센스</p></b></a>
+    
+    
+      <p id="logout" style="margin-right: 10px;" >로그아웃</p>
+
+  </div>
+
+<div id="main">
+  
+  <p id="text" style="margin-right: 10px;" ></p>
+  </div>
+
+<div style="border: 0.5px solid rgb(156, 155, 155); margin-bottom: 30px; " ></div>
+<div class="btns">
+
+
+    <a href="./coding.html"><button class="btns" id="btn1">코딩 게시판</button></a>
+    <a href="./free.html"><button class="btns" id="btn2">자유 게시판</button></a>
+    <a href="./pic.html"><button class="btns" id="btn3">사진게시판</button></a>
+    </div>
+    <p style="text-align: center; font-family: 'Gowun Dodum', sans-serif; font-size: 35px; margin-top: 10px; margin-bottom: -15px;"><B>자유 게시판</B></p>
+
+    <div style="width: 60%; height: 700px; background-color: white; border-radius: 20px; margin: 30px; margin-left: 20%;">
+
+<br>
+<div id="filesubmit">
+    <input type="file" class="file-select" accept="image/*"/>
+    <button class="file-submit">사진 등록</button>
+</div>
+
+<div style="margin-top: 630px; float: right; margin-right: -350px;">
+    <p >게시글 보러가기 →
+        <button><a href="./free.html">게시판</a></button> </p> 
+
+</div>
+
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.6.5/firebase-storage.js"></script>
+<script>
+
+  var firebaseConfig = {
+    apiKey: "AIzaSyDjFhVYoLu3PSWIrJ5gBuSDwwjOn8rHYfc",
+    authDomain: "web-app-competition.firebaseapp.com",
+    projectId: "web-app-competition",
+    storageBucket: "web-app-competition.appspot.com",
+    messagingSenderId: "987273969607",
+    appId: "1:987273969607:web:9485c513c5097164d7e3e2"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user) {
+
+      var uid = user.uid;
+      document.getElementById("text").innerText=user.email;
+    } else {
+      var provider = new firebase.auth.GoogleAuthProvider();
+      provider.setCustomParameters({
+        'login_hint': 'sdh@sdh.hs.kr'
+      });
+      firebase.auth().signInWithRedirect(provider);
+      firebase.auth()
+        .getRedirectResult()
+        .then((result) => {
+          if (result.credential) {
+            /** @type {firebase.auth.OAuthCredential} */
+            var credential = result.credential;
+
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = credential.accessToken;
+            // ...
+            console.log(result);
+          }
+          // The signed-in user info.
+          var user = result.user;
+        }).catch((error) => {
+          // Handle Errors here.
+          var errorCode = error.code;
+          var errorMessage = error.message;
+          // The email of the user's account used.
+          var email = error.email;
+          // The firebase.auth.AuthCredential type that was used.
+          var credential = error.credential;
+          // ...
+        });
+
+    }
+  });
+
+  document.getElementById("logout").addEventListener("click", ()=>{
+    firebase.auth().signOut().then(() => {
+// Sign-out successful.
+}).catch((error) => {
+// An error happened.
+});
+  })
+
+  document.addEventListener('DOMContentLoaded', function () {
+    const storageRef = firebase.storage().ref();
+    let selectedFile;
+
+    // File 선택
+    document.querySelector('.file-select').addEventListener('change', e => {
+        selectedFile = e.target.files[0];
+    });
+
+    // File 업로드
+    document.querySelector('.file-submit').addEventListener('click', () => {
+        storageRef
+                .child(`images/${selectedFile.name}`)
+                .put(selectedFile)
+                .on('state_changed', snapshot => {
+                                            console.log(snapshot)
+                                        }, error => {
+                                            console.log(error);
+                                        }, () => {
+                                            console.log('성공');
+                                        }
+                );
+    });
+});
+</script>
+</body>
+
+</html>
